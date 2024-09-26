@@ -5,21 +5,17 @@ import sqlite3
 from datetime import datetime
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QStackedWidget, QMessageBox, QListWidget
 
-# Replace these with your actual app ID and app key
 app_id = os.getenv('NUTRITIONIX_APP_ID')
 app_key = os.getenv('NUTRITIONIX_APP_KEY')
 
 if app_id is None or app_key is None:
     print("Error: API credentials are not set.")
 
-# Database setup
 db_name = "calories.db"
 
-# Initialize or connect to the database
 def init_db():
     conn = sqlite3.connect(db_name)
     c = conn.cursor()
-    # Create table if it doesn't exist
     c.execute('''
         CREATE TABLE IF NOT EXISTS calorie_intake (
             date TEXT PRIMARY KEY,
@@ -98,7 +94,7 @@ class MainWindow(QWidget):
         self.add_button.clicked.connect(self.add_calories)
         self.page1_layout.addWidget(self.add_button)
 
-        # ---- Search Bar for Food Item ----
+        # Search Bar for Food Item
         self.search_input = QLineEdit()
         self.search_input.setPlaceholderText("Enter a food item to search...")
         self.page1_layout.addWidget(self.search_input)
@@ -116,7 +112,7 @@ class MainWindow(QWidget):
         self.add_searched_calories_button = QPushButton("Add Searched Item's Calories")
         self.add_searched_calories_button.clicked.connect(self.add_searched_item_calories)
         self.page1_layout.addWidget(self.add_searched_calories_button)
-        self.add_searched_calories_button.setEnabled(False)  # Disable until a search is made
+        self.add_searched_calories_button.setEnabled(False) 
 
         # Button to go to calorie history page
         self.history_button = QPushButton("View Calorie History")
@@ -141,8 +137,8 @@ class MainWindow(QWidget):
         self.page2.setLayout(self.page2_layout)
 
         # Add pages to the stacked widget
-        self.stacked_widget.addWidget(self.page1)  # index 0
-        self.stacked_widget.addWidget(self.page2)  # index 1
+        self.stacked_widget.addWidget(self.page1)
+        self.stacked_widget.addWidget(self.page2)
 
         # Set the layout of the main window
         main_layout = QVBoxLayout()
@@ -169,7 +165,7 @@ class MainWindow(QWidget):
         """
         Switches to the calorie history page.
         """
-        self.load_calorie_history()  # Load history before showing the page
+        self.load_calorie_history()
         self.stacked_widget.setCurrentIndex(1)
 
     def show_main_page(self):
@@ -187,7 +183,7 @@ class MainWindow(QWidget):
             self.daily_calories += calorie_value
             self.calorie_label.setText(f"Total Calories Today: {self.daily_calories}")
             self.calorie_input.clear()
-            update_today_calories(self.daily_calories)  # Update the database
+            update_today_calories(self.daily_calories)
         except ValueError:
             self.calorie_label.setText("Please enter a valid number.")
 
